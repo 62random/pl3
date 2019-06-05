@@ -1,10 +1,11 @@
 # Gramática
-## Esta gramática pretende descrever uma rede semântica para representar um Museu dedicado a um músico
+## Esta gramática pretende descrever uma rede semântica para representar um Museu
 
 
-p0:   S   ->  Artista
-p1:   Artista   ->  '{' Pessoal  ',' '{' Eventos '}' ',' Formacao ',' '{' Obras '}' '}'
-p2:   Eventos   ->  Evento ';' Eventos
+p0:   Artistas  ->  Artista ';' Artistas
+p1:             |   Artista
+p2:   Artista   ->  '{' Pessoal  ',' '{' Eventos '}' ',' Formacao ',' '{' Obras '}' '}'
+p3:   Eventos   ->  Evento ';' Eventos
 p4:             |   Evento
 p5:   Evento    ->  '{' Tipo ',' Data ',' '{' Nomes '}' '}'
 p6:   Tipo      ->  CONCERTO
@@ -16,9 +17,9 @@ p11:  Nomes     ->  NOME ';' Nomes
 p12:            |   NOME
 p13:  Pessoal   ->  NOME ',' Naturalidade ',' Data ',' NOMENASC        
 p14:  Naturalidade  ->  CIDADE ',' PAIS      
-p15:  Formacao  ->  
-p16:  
-p17:
+p15:  Formacao  ->  Ensinou NOME ';'  Formacao
+p16:            |   Aprendeu NOME ';' Formacao
+p17:            |   &
 p18:
 p19:
 p20:
