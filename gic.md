@@ -20,9 +20,9 @@ p14:  Naturalidade  ->  CIDADE ',' PAIS
 p15:  Formacao  ->  Ensinou NOME ';'  Formacao
 p16:            |   Aprendeu NOME ';' Formacao
 p17:            |   &
-p18:
-p19:
-p20:
+p18:  Obras     ->  Obra ';' Obras
+p19:            |   Obra
+p20:  Obra      ->  '{' NOME ',' NOMEART ',' Data '}'
 p21:
 p22:
 p23:
