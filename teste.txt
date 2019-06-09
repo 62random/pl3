@@ -3,7 +3,7 @@
         NOME:       Mandragora,
         CIDADE:     SP,
         PAIS:       Brasil,
-        VIDA:       (28/04/1998),
+        VIDA:       (28/04/1998-09/06/2019),
         NOMENASC:   Neto,
         ENSINOU:    [Random, Eddy],
         APRENDEU:   [Pepe],

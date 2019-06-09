@@ -2,7 +2,7 @@
 %%
 [\n\ \t]*                   { ; }
 [0-9]+                      {yylval.val = atoi(yytext);return NUM;}
-[{};\(\),-\/:]              {return yytext[0];}
+[\[\]{};\(\),-\/:]              {return yytext[0];}
 APRENDEU                    {return APRENDEU;}
 ENSINOU                     {return ENSINOU;}
 FESTIVAL                    {return FESTIVAL;}
