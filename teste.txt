@@ -1,1 +1,24 @@
-{Mandragora , SP , Brasil , (28-04-1998) , Neto , { CONCERTO , (28-04-2019) , { Astrix ; ViniVici; };  } , ENSINOU ( Random ; Eddy ) ; Aprendeu ( Pepe ) , {   } } 
+[
+    {
+        NOME:       Mandragora,
+        CIDADE:     SP,
+        PAIS:       Brasil,
+        VIDA:       (28/04/1998),
+        NOMENASC:   Neto,
+        ENSINOU:    [Random, Eddy],
+        APRENDEU:   [Pepe],
+        EVENTOS:    [
+                        {   TIPO:       FESTIVAL,
+                            DATA:       (28/04/2019),
+                            ARTISTAS:   [Astrix, ViniVici]
+                        }   ],
+        OBRAS:      [
+                        {   TITULO:     AK47,
+                            ARTISTAS:   [Mandragora],
+                            LANCAMENTO: (28/04/2018)    },
+                        {
+                            TITULO:     Sick,
+                            ARTISTAS:   [Mandragora],
+                            LANCAMENTO: (28/04/2019)    }   ]
+    }
+]

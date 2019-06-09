@@ -1,91 +1,93 @@
 %{
+#include <stdio.h>
+#include <string.h>
+int asprintf(char ** str, const char * fmt, ...);
+int yylex();
+void yyerror(char * s);
+int yydebug = 1;
 %}
 %union {
-    int val;
-    char * txt;
-    char * code;
-    char * tipo;
-    char * formacao;
+  int val;
+  char *s;
 }
-%token  <txt>STR
-%token  <val>NUM
-%token  <tipo>CONCERTO FESTIVAL SARAU
-%token  <formacao>ENSINOU APRENDEU
-%type   <code>artistas artista eventos evento tipo data nomes pessoal naturalidade formacao obras obra nome pais cidade nomenasc nomeart 
-
+%token <val>NUM
+%token <s>STR
+%token APRENDEU ENSINOU SARAU CONCERTO FESTIVAL NOME CIDADE PAIS VIDA NOMENASC EVENTOS TIPO DATA ARTISTAS OBRAS TITULO ARTISTA LANCAMENTO
+%type  <s>artista artistas pessoal nome naturalidade data nomenasc cidade pais formacao obras obra nomes eventos evento tipo
 %%
 
-prog: artistas                                  {}
-    ;
+prg: '[' artistas ']'					                                        {printf("[\n\t%s\n]\n", $2); }
+   ;
 
-artistas: artista ';' artistas                  {} 
-        | artista ';'                           {}
+artistas:                                                                       {asprintf(&$$, "");}
+        | artista                                                               {asprintf(&$$, "%s", $1);}
+        | artista ',' artistas                                                  {asprintf(&$$, "%s, %s", $1, $3);}
         ;
 
-artista: '{' pessoal ',' '{' eventos '}' ',' formacao ',' '{' obras '}'  '}'    {}
+artista: '{' pessoal ',' formacao ',' EVENTOS ':' '[' eventos  ']' ',' OBRAS ':' '[' obras ']' '}'      {asprintf(&$$, "{%s, %s, [%s], [%s]}", $2, $4, $9, $15);}
        ;
 
-eventos: evento ';' eventos                     {}
-       ;
-
-evento: '{' tipo ',' data ',' '{' nomes '}' '}' {}
+pessoal:  NOME ':' nome ',' naturalidade ',' VIDA ':' data ',' NOMENASC ':' nomenasc                    {asprintf(&$$, "%s, %s, {%s}, {%s}", $3, $5, $9, $13);}
       ;
 
-tipo: CONCERTO                                  {}
-    | FESTIVAL                                  {}
-    | SARAU                                     {}
+nome: STR                                                                       {asprintf(&$$, "%s", $1);}
     ;
 
-data: '('NUM'/'NUM'/'NUM')'                     {}
-    | '('NUM'/'NUM'/'NUM'-'NUM'/'NUM'/'NUM')'   {}
-    ;
-
-nomes: nome ';' nomes                           {}
-     | nome ';'                                 {}
-     ;
-
-pessoal: nome ',' naturalidade ',' data ',' nomenasc     {printf("Nome: %s\n", $1);}
-       ;
-
-nome: STR                                       {printf("Nome2: %s\n", $1);}
-    ;
-
-naturalidade: cidade ',' pais                   {} 
+naturalidade: CIDADE ':' cidade ',' PAIS ':' pais                               {asprintf(&$$, "%s, %s", $3, $7);}
             ;
 
-cidade: STR                                     {}
+cidade: STR                                                                     {asprintf(&$$, "%s", $1);}
       ;
 
-pais: STR                                       {}
+pais: STR                                                                       {asprintf(&$$, "%s", $1);}
     ;
 
+data: '(' NUM '/' NUM '/' NUM')'                                                {asprintf(&$$, "(%d/%d/%d)", $2, $4, $6);}
+    | '(' NUM '/' NUM '/' NUM '-' NUM '/' NUM '/' NUM ')'                       {asprintf(&$$, "(%d/%d/%d - %d/%d/%d)", $2, $4, $6, $8, $10, $12);}
+    ;
 
-formacao: ENSINOU '(' nomes ')' ';' formacao    {}
-        | APRENDEU '(' nomes ')' ';' formacao   {}
-        | formacao ';'                          {}
+nomenasc: STR                                                                   {asprintf(&$$, "%s", $1);}
         ;
 
-obras: obra ';' obras                           {} 
-     | obra ';'                                 {}
+formacao: ENSINOU ':' '[' nomes ']' ',' APRENDEU ':' '[' nomes']'               {asprintf(&$$, "ENSINOU: [%s], APRENDEU: [%s]", $4, $10);}
+        ;
+
+nomes:                                                                          {asprintf(&$$, "");}
+     | nome                                                                     {asprintf(&$$, "%s", $1);}
+     | nome ',' nomes                                                           {asprintf(&$$, "%s; %s", $1, $3);}
      ;
 
-obra: '{' nome ',' nomeart ',' data '}'          {}
+eventos:                                                                        {asprintf(&$$, "");}
+       | evento                                                                 {asprintf(&$$, "%s", $1);}
+       | evento ',' eventos                                                     {asprintf(&$$, "%s; %s", $1, $3);}
+       ;
+
+evento: '{' TIPO ':' tipo ',' DATA ':' data ',' ARTISTAS ':' '[' nomes ']' '}'  {asprintf(&$$, "TIPO: %s, DATA: %s, ARTISTAS: [%s]", $4, $8, $13);}
+      ;
+
+tipo: CONCERTO                                                                  {asprintf(&$$, "Concerto");}
+    | SARAU                                                                     {asprintf(&$$, "Sarau");}
+    | FESTIVAL                                                                  {asprintf(&$$, "Festival");}
     ;
 
-nomenasc: STR                                   {}
-        ;
-nomeart: STR                                    {}
-        ;
+obras:                                                                          {asprintf(&$$, "");}
+     | obra                                                                     {asprintf(&$$, "%s", $1);}
+     | obra ',' obras                                                           {asprintf(&$$, "%s; %s", $1, $3);}
+     ;
+
+obra: '{' TITULO ':' nome ',' ARTISTAS ':' '[' nomes ']' ',' LANCAMENTO ':' data '}'   {asprintf(&$$, "TITULO: %s, ARTISTAS: [%s], LANCAMENTO: %s", $4, $9, $14);}
+    ;
 
 %%
-
 #include "lex.yy.c"
 
-void yyerror(char *s){
-    printf("%s, s");
+void yyerror(char* s) {
+	printf("%s", s);
 }
 
-int main(){
-    yyparse();
-    return 0;
+int main() {
+
+	yyparse();
+
+	return 0;
 }
