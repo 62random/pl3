@@ -44,9 +44,9 @@ char *  dataToString(P_DATA d);
 #define             L_EVENTO              2
 #define             L_OBRA                3
 //define formatting of output to .dot file
-#define             SHAPE_ARTISTA(F, A)            fprintf(F, "\t\"%s\" \t[shape=box, style=filled, fillcolor=\"#5A659E\", color=\"#5A659E\"];\n", A);
-#define             SHAPE_OBRA(F, O)               fprintf(F, "\t\"%s\" \t[style=filled, color=\"#CCBA8C\", fillcolor=\"#CCBA8C\"];\n", O);
-#define             SHAPE_EVENTO(F, E)             fprintf(F, "\t\"%s\" \t[shape=polygon, style=filled, fillcolor=\"#DD7230\", color=\"#DD7230\"];\n", E);
+#define             SHAPE_ARTISTA(F, A)            fprintf(F, "\t\"%s\" \t[label=\"%s\", href=\"pages/%s.html\", shape=box, style=filled, fillcolor=\"#5A659E\", color=\"#5A659E\"];\n", A, A, A);
+#define             SHAPE_OBRA(F, O)               fprintf(F, "\t\"%s\" \t[label=\"%s\", href=\"pages/%s.html\", style=filled, color=\"#CCBA8C\", fillcolor=\"#CCBA8C\"];\n", O, O, O);
+#define             SHAPE_EVENTO(F, E)             fprintf(F, "\t\"%s\" \t[label=\"%s\", href=\"pages/%s.html\", shape=polygon, style=filled, fillcolor=\"#DD7230\", color=\"#DD7230\"];\n", E, E, E);
 #define             SHAPE_ENSINOU(F, X, Y)         fprintf(F, "\t\"%s\" \t-> \t\"%s\" \t[arrowsize=0.4, weight=0.1, color=\"#5A659E\"];\n", X, Y);
 #define             SHAPE_CRIOU(F, X, Y)           fprintf(F, "\t\"%s\" \t-> \t\"%s\" \t[arrowsize=0.4, weight=0.1, color=\"#CCBA8C\"];\n", X, Y);
 #define             SHAPE_PARTICIPOU(F, X, Y)      fprintf(F, "\t\"%s\" \t-> \t\"%s\" \t[arrowsize=0.4, weight=0.1, color=\"#DD7230\"];\n", X, Y);
@@ -55,6 +55,61 @@ char *  dataToString(P_DATA d);
 #define             HTML_PARAGRAPH(F, S)           fprintf(F, "<p> %s </p>\n", S);
 #define             HTML_TITLE(F,T)                fprintf(F, "<h1> %s </h1>\n", T);
 #define             HTML_END(F)                    fprintf(F, "</div>\n</body>\n</html>");
+#define             HTML_START_OBRAS(F)            fprintf(F, "<h3>Obras</h3> \
+                                                                  <table class=\"table\"> \
+                                                                    <thead> \
+                                                                      <tr> \
+                                                                        <th scope=\"col\">Nome</th> \
+                                                                        <th scope=\"col\">Lançamento</th> \
+                                                                      </tr> \
+                                                                    </thead> \
+                                                                    <tbody>\n");
+#define             HTML_START_EVENTOS(F)          fprintf(F, "<h3>Eventos</h3> \
+                                                                  <table class=\"table\"> \
+                                                                    <thead> \
+                                                                      <tr> \
+                                                                        <th scope=\"col\">Tipo</th> \
+                                                                        <th scope=\"col\">Nome</th> \
+                                                                        <th scope=\"col\">Data</th> \
+                                                                      </tr> \
+                                                                    </thead> \
+                                                                    <tbody>\n");
+#define             HTML_START_ENSINOU(F)          fprintf(F, "<h3>Influenciou:</h3> \
+                                                                  <table class=\"table\"> \
+                                                                    <thead> \
+                                                                      <tr> \
+                                                                        <th scope=\"col\">Artista</th> \
+                                                                      </tr> \
+                                                                    </thead> \
+                                                                    <tbody>\n");
+#define             HTML_START_APRENDEU(F)         fprintf(F, "<h3>Influenciado por:</h3> \
+                                                                  <table class=\"table\"> \
+                                                                    <thead> \
+                                                                      <tr> \
+                                                                        <th scope=\"col\">Artista</th> \
+                                                                      </tr> \
+                                                                    </thead> \
+                                                                    <tbody>\n");
+#define             HTML_START_ARTISTAS(F)         fprintf(F,   "<table class=\"table\"> \
+                                                                    <thead> \
+                                                                      <tr> \
+                                                                        <th scope=\"col\">Artista</th> \
+                                                                      </tr> \
+                                                                    </thead> \
+                                                                    <tbody>\n");
+#define             HTML_END_TABLE(F)              fprintf(F, "</tbody>\n</table>\n");
+#define             HTML_EVENTO_ROW(F, T, N, D)    fprintf(F, "<tr> \
+                                                                  <td>%s</td> \
+                                                                  <td>%s</td> \
+                                                                  <td>%s</td> \
+                                                                </tr>\n", T, N, D);
+#define             HTML_OBRAS_ROW(F, N, L)        fprintf(F, "<tr> \
+                                                                  <td>%s</td> \
+                                                                  <td>%s</td> \
+                                                                </tr>\n", N, L);
+#define             HTML_NOME_ROW(F, N)            fprintf(F, "<tr> \
+                                                                  <td>%s</td> \
+                                                                </tr>\n", N);
 #define             HTML_BEGINNING(F)              fprintf(F, "<!doctype html> \
                                                                 <html lang=\"en\"> \
                                                                   <head> \
@@ -65,7 +120,7 @@ char *  dataToString(P_DATA d);
                                                                 \
                                                                     <title>Processamento de Linguagens</title> \
                                                                 \
-                                                                    <link rel=\"canonical\" href=\"https:\/\/getbootstrap.com\/docs\/4.0\/examples\/grid\/\"> \
+                                                                    <link rel=\"canonical\" href=\"https://getbootstrap.com/docs/4.0/examples/grid/\"> \
                                                                 \
                                                                     <link href=\"bootstrap.min.css\" rel=\"stylesheet\"> \
                                                                 \

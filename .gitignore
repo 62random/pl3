@@ -2,3 +2,8 @@
 *.o
 *.output
 y.tab.h
+*.png 
+*.dot
+prog
+pages/*
+*.svg

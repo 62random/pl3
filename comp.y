@@ -385,26 +385,13 @@ void    eventoGraph(void * v, void * ud){
     UD d = (UD) ud;
     P_EVENTO e = (P_EVENTO) v;
 
-    char * str;
-    switch (e->tipo){
-        case FESTIVAL_D:
-            asprintf(&str, "Festival %s em %s",e->nome, dataToString(e->data));
-            break;
-        case SARAU_D:
-            asprintf(&str, "Sarau %s em %s", e->nome, dataToString(e->data));
-            break;
-        case CONCERTO_D:
-            asprintf(&str, "Concerto %s em %s", e->nome, dataToString(e->data));
-            break;
-    }
-    SHAPE_EVENTO(d->f, str);
-    SHAPE_PARTICIPOU(d->f, d->name, str);
+    SHAPE_EVENTO(d->f, e->nome);
+    SHAPE_PARTICIPOU(d->f, d->name, e->nome);
     UD nd = malloc(sizeof(struct u_d));
     nd->f = d->f;
-    nd->name = str;
+    nd->name = e->nome;
     g_slist_foreach(e->artistas, &participantesGraph, nd);
     free(nd);
-    free(str);
 }
 
 void    ensinouGraph(void * v, void * ud){
@@ -453,7 +440,7 @@ void    obraGraph(void * v, void * ud){
 void    artistaGraph(void * k, void * v, void * ud){
     if(!ud || !v)
         return;
-        FILE * f = (FILE *) ud;
+    FILE * f = (FILE *) ud;
     P_ARTISTA a = (P_ARTISTA) v;
 
     GRAPH_TEMPLATE(f);
@@ -472,8 +459,135 @@ void    artistaGraph(void * k, void * v, void * ud){
 
 /*FUNCTIONS TO PRINT THE DATA INTO HTML PAGES */
 
+void ensinouHtml(void * v, void * ud){
+    if(!ud || !v)
+        return;
+    UD d = (UD) ud;
+    char * s = (char *) v;
+
+    HTML_NOME_ROW(d->f, s);
+}
+
+void aprendeuHtml(void * v, void * ud){
+    if(!ud || !v)
+        return;
+    UD d = (UD) ud;
+    char * s = (char *) v;
+
+    HTML_NOME_ROW(d->f, s);
+}
+
+void nomeHtml(void * v, void * ud){
+    if(!ud || !v)
+        return;
+    FILE * f = (FILE *) ud;
+    char * s = (char *) v;
+
+    HTML_NOME_ROW(f, s);
+}
+
+void eventoHtml(void * v, void * ud){
+    if(!ud || !v)
+        return;
+    UD d = (UD) ud;
+    P_EVENTO e = (P_EVENTO) v;
+
+    char * tipo;
+
+    switch(e->tipo){
+        case FESTIVAL_D:
+            asprintf(&tipo, "Festival");
+            break;
+        case SARAU_D:
+            asprintf(&tipo, "Sarau");
+            break;
+        case CONCERTO_D:
+            asprintf(&tipo, "Concerto");
+            break;
+        default:
+            asprintf(&tipo, "Evento");
+            break;
+    }
+
+
+    HTML_EVENTO_ROW(d->f, tipo, e->nome, dataToString(e->data));
+
+    char * file; asprintf(&file, "pages/%s.html", e->nome);
+    FILE * f = fopen(file , "w");
+
+    HTML_BEGINNING(f);
+    HTML_TITLE(f, e->nome);
+    char * str; asprintf(&str, "%s %s realizado em %s, ao qual foram os seguintes artistas:", tipo, e->nome,  dataToString(e->data));
+    HTML_PARAGRAPH(f, str);
+    free(str); free(tipo);
+    HTML_START_ARTISTAS(f);
+    g_slist_foreach(e->artistas, &nomeHtml, f);
+    HTML_END_TABLE(f);
+    HTML_END(f);
+    free(file);
+    fclose(f);
+}
+
+
+
+
+void obraHtml(void * v, void * ud){
+    if(!ud || !v)
+        return;
+    UD d = (UD) ud;
+    P_OBRA o = (P_OBRA) v;
+
+    HTML_OBRAS_ROW(d->f, o->titulo, dataToString(o->lancamento));
+
+    char * file; asprintf(&file, "pages/%s.html", o->titulo);
+    FILE * f = fopen(file , "w");
+
+    HTML_BEGINNING(f);
+    HTML_TITLE(f, o->titulo);
+    char * str; asprintf(&str, "%s foi lançada em %s e criada pelos seguintes artistas:", o->titulo, dataToString(o->lancamento));
+    HTML_PARAGRAPH(f, str);
+    free(str);
+    HTML_START_ARTISTAS(f);
+    g_slist_foreach(o->artistas, &nomeHtml, f);
+    HTML_END_TABLE(f);
+    HTML_END(f);
+    free(file);
+    fclose(f);
+}
+
 void artistaHtml( void * k, void * v, void * ud){
-    
+    if(!v)
+        return;
+    P_ARTISTA a = (P_ARTISTA) v;
+    char * file; asprintf(&file, "pages/%s.html", a->nome);
+    FILE * f = fopen(file , "w");
+
+    HTML_BEGINNING(f);
+    HTML_TITLE(f, a->nome);
+    char * str; asprintf(&str, "%s %s nasceu em %s, %s com o nome %s.\n", a->nome, dataToString(a->vida), a->cidade, a->pais, a->nomenasc);
+    HTML_PARAGRAPH(f, str);
+    free(str);
+
+    UD d = malloc(sizeof(struct u_d));
+    d->name = a->nome;
+    d->f = f;
+    HTML_START_ENSINOU(f);
+    g_slist_foreach(a->ensinou, &ensinouHtml, d);
+    HTML_END_TABLE(f);
+    HTML_START_APRENDEU(f);
+    g_slist_foreach(a->aprendeu, &aprendeuHtml, d);
+    HTML_END_TABLE(f);
+    HTML_START_EVENTOS(f);
+    g_slist_foreach(a->eventos, &eventoHtml, d);
+    HTML_END_TABLE(f);
+    HTML_START_OBRAS(f);
+    g_slist_foreach(a->obras, &obraHtml, d);
+    HTML_END_TABLE(f);
+
+    HTML_END(f);
+    free(d);
+    free(file);
+    fclose(f);
 }
 
 /*---------------------------------------------*/
@@ -499,6 +613,8 @@ int main() {
     g_hash_table_foreach(artistas, &artistaGraph, f);
     fprintf(f, "}");
     fclose(f);
+
+    g_hash_table_foreach(artistas, &artistaHtml, NULL);
 
 	return 0;
 }
