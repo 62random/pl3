@@ -25,7 +25,7 @@ int             flag2;
 %token <val>NUM
 %token <s>STR
 %token APRENDEU ENSINOU SARAU CONCERTO FESTIVAL NOME CIDADE PAIS VIDA NOMENASC EVENTOS TIPO DATA ARTISTAS OBRAS TITULO ARTISTA LANCAMENTO
-%type  <s>artista artistas pessoal nome naturalidade data nomenasc cidade pais formacao obras obra nomes eventos evento tipo
+%type  <s>artista artistas pessoal nome naturalidade data nomenasc cidade pais formacao obras obra nomes eventos evento tipo ensinou aprendeu
 %%
 
 prg: '[' artistas ']'					                                        {printf("[\n\t%s\n]\n", $2); }
@@ -97,30 +97,30 @@ nomenasc: STR                                                                   
                                                                                 }
         ;
 
-formacao: ENSINOU ':' '[' nomes ']' ',' APRENDEU ':' '[' nomes']'               {
-                                                                                    asprintf(&$$, "ENSINOU: [%s], APRENDEU: [%s]", $4, $10);
+formacao: ensinou ',' aprendeu                                                  {asprintf(&$$, "%s , %s", $1, $3);}
+        ;
+
+ensinou: ENSINOU ':' '[' nomes ']'                                              {
+                                                                                    asprintf(&$$, "ENSINOU: [%s]", $4);
+                                                                                    flag2 = 1;
+                                                                                }
+        ;
+
+aprendeu: APRENDEU ':' '[' nomes']'                                             {
+                                                                                    asprintf(&$$, "APRENDEU: [%s]", $4);
                                                                                     flag = L_EVENTO;
                                                                                 }
         ;
 
 nomes:                                                                          {
                                                                                     asprintf(&$$, "");
-                                                                                    if (flag == L_FORMACAO) {
-                                                                                        if ( flag2 == 0)
-                                                                                            flag2 = 1;
-                                                                                        else {
-                                                                                            flag2 = 0;
-                                                                                        }
-                                                                                    }
                                                                                 }
      | nome                                                                     {
                                                                                     asprintf(&$$, "%s", $1);
                                                                                     if (flag == L_FORMACAO){
                                                                                         if (flag2 == 0) {
-                                                                                            flag2 = 1;
                                                                                             ensinou_aux = g_slist_append(ensinou_aux, strdup($1));
                                                                                         }else if (flag2 == 1) {
-                                                                                            flag2 = 0;
                                                                                             aprendeu_aux = g_slist_append(aprendeu_aux, strdup($1));
                                                                                         }
                                                                                     } else if (flag == L_EVENTO) {
@@ -365,6 +365,15 @@ typedef struct u_d {
     char * name;
 } * UD;
 
+void    participantesGraph(void * v, void * ud){
+    if(!ud || !v)
+        return;
+    UD d = (UD) ud;
+    char * s = (char *) v;
+
+    SHAPE_PARTICIPOU(d->f, s, d->name);
+}
+
 void    eventoGraph(void * v, void * ud){
     if(!ud || !v)
         return;
@@ -385,6 +394,11 @@ void    eventoGraph(void * v, void * ud){
     }
     SHAPE_EVENTO(d->f, str);
     SHAPE_PARTICIPOU(d->f, d->name, str);
+    UD nd = malloc(sizeof(struct u_d));
+    nd->f = d->f;
+    nd->name = str;
+    g_slist_foreach(e->artistas, &participantesGraph, nd);
+    free(nd);
     free(str);
 }
 
@@ -397,6 +411,16 @@ void    ensinouGraph(void * v, void * ud){
     SHAPE_ENSINOU(d->f, d->name, s);
 }
 
+void    criadoresGraph(void * v, void * ud){
+    if(!ud || !v)
+        return;
+    UD d = (UD) ud;
+    char * s = (char *) v;
+
+    SHAPE_CRIOU(d->f, s, d->name);
+}
+
+
 void    obraGraph(void * v, void * ud){
     if(!ud || !v)
         return;
@@ -405,6 +429,11 @@ void    obraGraph(void * v, void * ud){
 
     SHAPE_OBRA(d->f, o->titulo);
     SHAPE_CRIOU(d->f, d->name, o->titulo);
+    UD nd = malloc(sizeof(struct u_d));
+    nd->f = d->f;
+    nd->name = o->titulo;
+    g_slist_foreach(o->artistas, &criadoresGraph, nd);
+    free(nd);
 }
 
 void    artistaGraph(void * k, void * v, void * ud){
@@ -441,6 +470,8 @@ int main() {
     nomes_aux   = g_slist_alloc();
     eventos_aux = g_slist_alloc();
     obras_aux   = g_slist_alloc();
+    aprendeu_aux = g_slist_alloc();
+    ensinou_aux = g_slist_alloc();
 
 	yyparse();
     printf("-----------PARSING DONE -------------\n");

@@ -1,4 +1,4 @@
-digraph Museu {
+strict digraph Museu {
 	size="31,41";
 	node [fontname="helvetica"];
 	ranksep=3.0;
@@ -7,10 +7,15 @@ digraph Museu {
 	splines="true";
 	"Mandragora" 	[shape=box, style=filled, fillcolor="#8B95C9", color="#8B95C9"];
 	"Mandragora" 	-> 	"Eddy" 	[arrowsize=0.4, weight=0.1, color="#8B95C9"];
+	"Mandragora" 	-> 	"Random" 	[arrowsize=0.4, weight=0.1, color="#8B95C9"];
 	"Festival em (28/4/2019)" 	[shape=diamond, style=filled, fillcolor="#CCC9E7", color="#CCC9E7"];
 	"Mandragora" 	-> 	"Festival em (28/4/2019)" 	[arrowsize=0.4, weight=0.1, color="#CCC9E7"];
+	"ViniVici" 	-> 	"Festival em (28/4/2019)" 	[arrowsize=0.4, weight=0.1, color="#CCC9E7"];
+	"Astrix" 	-> 	"Festival em (28/4/2019)" 	[arrowsize=0.4, weight=0.1, color="#CCC9E7"];
 	"AK47" 	[style=filled, color="#E8DBC5", fillcolor="#E8DBC5"];
 	"Mandragora" 	-> 	"AK47" 	[arrowsize=0.4, weight=0.1, color="#E8DBC5"];
+	"Mandragora" 	-> 	"AK47" 	[arrowsize=0.4, weight=0.1, color="#E8DBC5"];
 	"Sick" 	[style=filled, color="#E8DBC5", fillcolor="#E8DBC5"];
+	"Mandragora" 	-> 	"Sick" 	[arrowsize=0.4, weight=0.1, color="#E8DBC5"];
 	"Mandragora" 	-> 	"Sick" 	[arrowsize=0.4, weight=0.1, color="#E8DBC5"];
 }

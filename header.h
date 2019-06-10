@@ -50,4 +50,4 @@ char *  dataToString(P_DATA d);
 #define             SHAPE_ENSINOU(F, X, Y)         fprintf(F, "\t\"%s\" \t-> \t\"%s\" \t[arrowsize=0.4, weight=0.1, color=\"#8B95C9\"];\n", X, Y);
 #define             SHAPE_CRIOU(F, X, Y)           fprintf(F, "\t\"%s\" \t-> \t\"%s\" \t[arrowsize=0.4, weight=0.1, color=\"#E8DBC5\"];\n", X, Y);
 #define             SHAPE_PARTICIPOU(F, X, Y)      fprintf(F, "\t\"%s\" \t-> \t\"%s\" \t[arrowsize=0.4, weight=0.1, color=\"#CCC9E7\"];\n", X, Y);
-#define             GRAPH_TEMPLATE(F)              fprintf(F, "digraph Museu {\n\tsize=\"31,41\";\n\tnode [fontname=\"helvetica\"];\n\tranksep=3.0;\n\tnodesep=2.0;\n\toverlap=\"false\";\n\tsplines=\"true\";\n");
+#define             GRAPH_TEMPLATE(F)              fprintf(F, "strict digraph Museu {\n\tsize=\"31,41\";\n\tnode [fontname=\"helvetica\"];\n\tranksep=3.0;\n\tnodesep=2.0;\n\toverlap=\"false\";\n\tsplines=\"true\";\n");
