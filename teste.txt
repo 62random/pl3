@@ -9,8 +9,9 @@
         APRENDEU:   [Pepe],
         EVENTOS:    [
                         {   TIPO:       FESTIVAL,
+                            NOME:       Boom Festival,
                             DATA:       (28/04/2019),
-                            ARTISTAS:   [Astrix, ViniVici]
+                            ARTISTAS:   [Astrix, Vini Vici]
                         }   ],
         OBRAS:      [
                         {   TITULO:     AK47,
@@ -20,5 +21,28 @@
                             TITULO:     Sick,
                             ARTISTAS:   [Mandragora],
                             LANCAMENTO: (28/04/2019)    }   ]
+    },
+    {
+        NOME:       Vini Vici,
+        CIDADE:     Dunno,
+        PAIS:       Far Far Away,
+        VIDA:       (15/06/1998),
+        NOMENASC:   Joao,
+        ENSINOU:    [Mandragora, Random],
+        APRENDEU:   [Eddy],
+        EVENTOS:    [
+                        {   TIPO:       FESTIVAL,
+                            NOME:       Tomorrow Land,
+                            DATA:       (28/04/2019),
+                            ARTISTAS:   [Astrix, Mandragora]
+                        }   ],
+        OBRAS:      [
+                        {   TITULO:     FreeTibet,
+                            ARTISTAS:   [Vini Vici, Highlight Tribe],
+                            LANCAMENTO: (19/03/2010)    },
+                        {
+                            TITULO:     HighSpirit,
+                            ARTISTAS:   [Vini Vici],
+                            LANCAMENTO: (28/04/2016)    }   ]
     }
 ]

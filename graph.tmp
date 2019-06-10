@@ -16,8 +16,17 @@ digraph Museu {
 	"FreeTibet" 	[style=filled, color="#CCBA8C", fillcolor="#CCBA8C"];
 	"Vini Vici" 	-> 	"FreeTibet" 	[arrowsize=0.4, weight=0.1, color="#CCBA8C"];
 	"Highlight Tribe" 	-> 	"FreeTibet" 	[arrowsize=0.4, weight=0.1, color="#CCBA8C"];
+	"Vini Vici" 	-> 	"FreeTibet" 	[arrowsize=0.4, weight=0.1, color="#CCBA8C"];
 	"HighSpirit" 	[style=filled, color="#CCBA8C", fillcolor="#CCBA8C"];
 	"Vini Vici" 	-> 	"HighSpirit" 	[arrowsize=0.4, weight=0.1, color="#CCBA8C"];
+	"Vini Vici" 	-> 	"HighSpirit" 	[arrowsize=0.4, weight=0.1, color="#CCBA8C"];
+digraph Museu {
+	size="31,41";
+	node [fontname="helvetica"];
+	ranksep=3.0;
+	nodesep=2.0;
+	overlap="false";
+	splines="true";
 	"Mandragora" 	[shape=box, style=filled, fillcolor="#5A659E", color="#5A659E"];
 	"Mandragora" 	-> 	"Eddy" 	[arrowsize=0.4, weight=0.1, color="#5A659E"];
 	"Mandragora" 	-> 	"Random" 	[arrowsize=0.4, weight=0.1, color="#5A659E"];
@@ -28,6 +37,8 @@ digraph Museu {
 	"Astrix" 	-> 	"Festival Boom Festival em (28/4/2019)" 	[arrowsize=0.4, weight=0.1, color="#DD7230"];
 	"AK47" 	[style=filled, color="#CCBA8C", fillcolor="#CCBA8C"];
 	"Mandragora" 	-> 	"AK47" 	[arrowsize=0.4, weight=0.1, color="#CCBA8C"];
+	"Mandragora" 	-> 	"AK47" 	[arrowsize=0.4, weight=0.1, color="#CCBA8C"];
 	"Sick" 	[style=filled, color="#CCBA8C", fillcolor="#CCBA8C"];
+	"Mandragora" 	-> 	"Sick" 	[arrowsize=0.4, weight=0.1, color="#CCBA8C"];
 	"Mandragora" 	-> 	"Sick" 	[arrowsize=0.4, weight=0.1, color="#CCBA8C"];
 }

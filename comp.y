@@ -41,6 +41,8 @@ artista: '{' pessoal ',' formacao ',' EVENTOS ':' '[' eventos  ']' ',' OBRAS ':'
                                                                                                             g_hash_table_insert(artistas, nome_aux,newArtista(nome_aux, cidade_aux, pais_aux, vida_aux, nomenasc_aux, ensinou_aux, aprendeu_aux, eventos_aux, obras_aux));
                                                                                                             ensinou_aux = g_slist_alloc();
                                                                                                             aprendeu_aux = g_slist_alloc();
+                                                                                                            obras_aux = g_slist_alloc();
+                                                                                                            eventos_aux = g_slist_alloc();
                                                                                                         }
        ;
 
@@ -150,9 +152,9 @@ eventos:                                                                        
        | evento ',' eventos                                                     {asprintf(&$$, "%s; %s", $1, $3);}
        ;
 
-evento: '{' TIPO ':' tipo ',' DATA ':' data ',' ARTISTAS ':' '[' nomes ']' '}'  {
-                                                                                    asprintf(&$$, "TIPO: %s, DATA: %s, ARTISTAS: [%s]", $4, $8, $13);
-                                                                                    eventos_aux = g_slist_append(eventos_aux, newEvento(tipo, data_aux, nomes_aux));
+evento: '{' TIPO ':' tipo ',' NOME ':' nome ',' DATA ':' data ',' ARTISTAS ':' '[' nomes ']' '}'  {
+                                                                                    asprintf(&$$, "TIPO: %s, NOME: %s, DATA: %s, ARTISTAS: [%s]", $4, $8, $12, $17);
+                                                                                    eventos_aux = g_slist_append(eventos_aux, newEvento(tipo, strdup($8), data_aux, nomes_aux));
                                                                                     nomes_aux = g_slist_alloc();
                                                                                 }
       ;
@@ -195,6 +197,7 @@ struct obra {
 
 struct evento {
     int         tipo;
+    char *      nome;
     P_DATA      data;
     GSList *    artistas;
 };
@@ -247,9 +250,10 @@ void    destroyObra(void * v){
     free(o);
 }
 
-P_EVENTO  newEvento(int tipo, P_DATA data, GSList * artistas){
+P_EVENTO  newEvento(int tipo, char * nome, P_DATA data, GSList * artistas){
     P_EVENTO e    = malloc(sizeof(struct evento));
     e->tipo     = tipo;
+    e->nome     = nome;
     e->data     = data;
     e->artistas = artistas;
 }
@@ -260,6 +264,7 @@ void    destroyEvento(void * v){
     P_EVENTO e = (P_EVENTO) v;
     destroyData(e->data);
     g_slist_free_full(e->artistas, free);
+    free(e->nome);
     free(e);
 }
 
@@ -327,7 +332,7 @@ void    printEvento(void * v, void * ud) {
             break;
     }
 
-    printf("%s na data %s com os artistas [", str, dataToString(e->data));
+    printf("%s  %s na data %s com os artistas [", str, e->nome, dataToString(e->data));
     g_slist_foreach(e->artistas, &printNome, NULL);
     printf("],");
 }
@@ -383,13 +388,13 @@ void    eventoGraph(void * v, void * ud){
     char * str;
     switch (e->tipo){
         case FESTIVAL_D:
-            asprintf(&str, "Festival em %s", dataToString(e->data));
+            asprintf(&str, "Festival %s em %s",e->nome, dataToString(e->data));
             break;
         case SARAU_D:
-            asprintf(&str, "Sarau em %s", dataToString(e->data));
+            asprintf(&str, "Sarau %s em %s", e->nome, dataToString(e->data));
             break;
         case CONCERTO_D:
-            asprintf(&str, "Concerto em %s", dataToString(e->data));
+            asprintf(&str, "Concerto %s em %s", e->nome, dataToString(e->data));
             break;
     }
     SHAPE_EVENTO(d->f, str);
@@ -409,6 +414,15 @@ void    ensinouGraph(void * v, void * ud){
     char * s = (char *) v;
 
     SHAPE_ENSINOU(d->f, d->name, s);
+}
+
+void    aprendeuGraph(void * v, void * ud){
+    if(!ud || !v)
+        return;
+    UD d = (UD) ud;
+    char * s = (char *) v;
+
+    SHAPE_ENSINOU(d->f, s, d->name);
 }
 
 void    criadoresGraph(void * v, void * ud){
@@ -439,7 +453,7 @@ void    obraGraph(void * v, void * ud){
 void    artistaGraph(void * k, void * v, void * ud){
     if(!ud || !v)
         return;
-    FILE * f = fopen((char *) ud, "w");
+        FILE * f = (FILE *) ud;
     P_ARTISTA a = (P_ARTISTA) v;
 
     GRAPH_TEMPLATE(f);
@@ -450,17 +464,19 @@ void    artistaGraph(void * k, void * v, void * ud){
     d->f = f;
     //g_slist_foreach(a->aprendeu, &aprendeuGraph, d);
     g_slist_foreach(a->ensinou, &ensinouGraph, d);
+    g_slist_foreach(a->aprendeu, &aprendeuGraph, d);
     g_slist_foreach(a->eventos, &eventoGraph, d);
     g_slist_foreach(a->obras, &obraGraph, d);
     free(d);
-
-    fprintf(f, "}");
-    fclose(f);
 }
 
 /*FUNCTIONS TO PRINT THE DATA INTO HTML PAGES */
 
+void artistaHtml( void * k, void * v, void * ud){
+    
+}
 
+/*---------------------------------------------*/
 void yyerror(char* s) {
 	printf("%s", s);
 }
@@ -477,7 +493,12 @@ int main() {
     printf("-----------PARSING DONE -------------\n");
 
     g_hash_table_foreach(artistas, &printArtista, NULL);
-    g_hash_table_foreach(artistas, &artistaGraph, "graph.dot");
+
+
+    FILE * f = fopen("graph.tmp", "w");
+    g_hash_table_foreach(artistas, &artistaGraph, f);
+    fprintf(f, "}");
+    fclose(f);
 
 	return 0;
 }

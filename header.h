@@ -24,7 +24,7 @@ P_DATA    newData(int dn, int mn, int an, int dm, int mm, int am);
 void    destroyData(void * v);
 P_OBRA    newObra(char * titulo, GSList * artistas,P_DATA lancamento);
 void    destroyObra(void * v);
-P_EVENTO  newEvento(int tipo, P_DATA data, GSList * artistas);
+P_EVENTO  newEvento(int tipo, char * nome, P_DATA data, GSList * artistas);
 void    destroyEvento(void * v);
 P_ARTISTA newArtista(char * nome, char * cidade,
                     char * pais, P_DATA vida, char * nomenasc,
@@ -44,10 +44,33 @@ char *  dataToString(P_DATA d);
 #define             L_EVENTO              2
 #define             L_OBRA                3
 //define formatting of output to .dot file
-#define             SHAPE_ARTISTA(F, A)            fprintf(F, "\t\"%s\" \t[shape=box, style=filled, fillcolor=\"#8B95C9\", color=\"#8B95C9\"];\n", A);
-#define             SHAPE_OBRA(F, O)               fprintf(F, "\t\"%s\" \t[style=filled, color=\"#E8DBC5\", fillcolor=\"#E8DBC5\"];\n", O);
-#define             SHAPE_EVENTO(F, E)             fprintf(F, "\t\"%s\" \t[shape=diamond, style=filled, fillcolor=\"#CCC9E7\", color=\"#CCC9E7\"];\n", E);
-#define             SHAPE_ENSINOU(F, X, Y)         fprintf(F, "\t\"%s\" \t-> \t\"%s\" \t[arrowsize=0.4, weight=0.1, color=\"#8B95C9\"];\n", X, Y);
-#define             SHAPE_CRIOU(F, X, Y)           fprintf(F, "\t\"%s\" \t-> \t\"%s\" \t[arrowsize=0.4, weight=0.1, color=\"#E8DBC5\"];\n", X, Y);
-#define             SHAPE_PARTICIPOU(F, X, Y)      fprintf(F, "\t\"%s\" \t-> \t\"%s\" \t[arrowsize=0.4, weight=0.1, color=\"#CCC9E7\"];\n", X, Y);
-#define             GRAPH_TEMPLATE(F)              fprintf(F, "strict digraph Museu {\n\tsize=\"31,41\";\n\tnode [fontname=\"helvetica\"];\n\tranksep=3.0;\n\tnodesep=2.0;\n\toverlap=\"false\";\n\tsplines=\"true\";\n");
+#define             SHAPE_ARTISTA(F, A)            fprintf(F, "\t\"%s\" \t[shape=box, style=filled, fillcolor=\"#5A659E\", color=\"#5A659E\"];\n", A);
+#define             SHAPE_OBRA(F, O)               fprintf(F, "\t\"%s\" \t[style=filled, color=\"#CCBA8C\", fillcolor=\"#CCBA8C\"];\n", O);
+#define             SHAPE_EVENTO(F, E)             fprintf(F, "\t\"%s\" \t[shape=polygon, style=filled, fillcolor=\"#DD7230\", color=\"#DD7230\"];\n", E);
+#define             SHAPE_ENSINOU(F, X, Y)         fprintf(F, "\t\"%s\" \t-> \t\"%s\" \t[arrowsize=0.4, weight=0.1, color=\"#5A659E\"];\n", X, Y);
+#define             SHAPE_CRIOU(F, X, Y)           fprintf(F, "\t\"%s\" \t-> \t\"%s\" \t[arrowsize=0.4, weight=0.1, color=\"#CCBA8C\"];\n", X, Y);
+#define             SHAPE_PARTICIPOU(F, X, Y)      fprintf(F, "\t\"%s\" \t-> \t\"%s\" \t[arrowsize=0.4, weight=0.1, color=\"#DD7230\"];\n", X, Y);
+#define             GRAPH_TEMPLATE(F)              fprintf(F, "digraph Museu {\n\tsize=\"31,41\";\n\tnode [fontname=\"helvetica\"];\n\tranksep=3.0;\n\tnodesep=2.0;\n\toverlap=\"false\";\n\tsplines=\"true\";\n");
+//defin formatting of output to html files
+#define             HTML_PARAGRAPH(F, S)           fprintf(F, "<p> %s </p>\n", S);
+#define             HTML_TITLE(F,T)                fprintf(F, "<h1> %s </h1>\n", T);
+#define             HTML_END(F)                    fprintf(F, "</div>\n</body>\n</html>");
+#define             HTML_BEGINNING(F)              fprintf(F, "<!doctype html> \
+                                                                <html lang=\"en\"> \
+                                                                  <head> \
+                                                                    <meta charset=\"utf-8\"> \
+                                                                    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\"> \
+                                                                    <meta name=\"description\" content=\"\"> \
+                                                                    <meta name=\"author\" content=\"\"> \
+                                                                \
+                                                                    <title>Processamento de Linguagens</title> \
+                                                                \
+                                                                    <link rel=\"canonical\" href=\"https:\/\/getbootstrap.com\/docs\/4.0\/examples\/grid\/\"> \
+                                                                \
+                                                                    <link href=\"bootstrap.min.css\" rel=\"stylesheet\"> \
+                                                                \
+                                                                    <link href=\"grid.css\" rel=\"stylesheet\"> \
+                                                                  </head> \
+                                                                \
+                                                                  <body> \
+                                                                    <div class=\"container\">\n");

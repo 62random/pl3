@@ -20,6 +20,6 @@ OBRAS                       {return OBRAS;}
 TITULO                      {return TITULO;}
 ARTISTA                     {return ARTISTA;}
 LANCAMENTO                  {return LANCAMENTO;}
-[a-zA-Z0-9]*                {yylval.s = strdup(yytext);return STR;}
+[a-zA-Z0-9][a-zA-Z0-9\ ]*[a-zA-Z0-9]              {yylval.s = strdup(yytext);return STR;}
 .                           { ; }
 %%
