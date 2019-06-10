@@ -1,48 +1,99 @@
 [
     {
-        NOME:       Mandragora,
-        CIDADE:     SP,
-        PAIS:       Brasil,
-        VIDA:       (28/04/1998-09/06/2019),
-        NOMENASC:   Neto,
-        ENSINOU:    [Random, Eddy],
-        APRENDEU:   [Pepe],
+        NOME:       Tony Bennett,
+        CIDADE:     New York,
+        PAIS:       United States of America,
+        VIDA:       (03/08/1926),
+        NOMENASC:   Anthony Dominick Benedetto,
+        ENSINOU:    [Michael Jackson, Elvis Presley],
+        APRENDEU:   [Frank Sinatra],
         EVENTOS:    [
-                        {   TIPO:       FESTIVAL,
-                            NOME:       Boom Festival,
-                            DATA:       (28/04/2019),
-                            ARTISTAS:   [Astrix, Vini Vici]
+                        {   TIPO:       Sarau,
+                            NOME:       Stars Tonight,
+                            DATA:       (15/03/1940),
+                            ARTISTAS:   [Frank Sinatra, Michael Jackson]
                         }   ],
         OBRAS:      [
-                        {   TITULO:     AK47,
-                            ARTISTAS:   [Mandragora],
-                            LANCAMENTO: (28/04/2018)    },
+                        {   TITULO:     Body and Soul,
+                            ARTISTAS:   [Tony Bennett, Amy Winehouse],
+                            LANCAMENTO: (14/09/2011)    },
                         {
-                            TITULO:     Sick,
-                            ARTISTAS:   [Mandragora],
+                            TITULO:     The Lady is a Tramp,
+                            ARTISTAS:   [Tony Bennett, Lady Gaga],
                             LANCAMENTO: (28/04/2019)    }   ]
     },
     {
-        NOME:       Vini Vici,
-        CIDADE:     Dunno,
-        PAIS:       Far Far Away,
-        VIDA:       (15/06/1998),
-        NOMENASC:   Joao,
-        ENSINOU:    [Mandragora, Random],
-        APRENDEU:   [Eddy],
+        NOME:       Michael Jackson,
+        CIDADE:     Los Angeles,
+        PAIS:       United States of America,
+        VIDA:       (29/08/1958-25/06/2009),
+        NOMENASC:   Michael Joseph Jackson,
+        ENSINOU:    [Lady Gaga],
+        APRENDEU:   [Elvis Presley],
         EVENTOS:    [
                         {   TIPO:       FESTIVAL,
-                            NOME:       Tomorrow Land,
+                            NOME:       Rock in Rio,
                             DATA:       (28/04/2019),
-                            ARTISTAS:   [Astrix, Mandragora]
+                            ARTISTAS:   [Lady Gaga, Tonny Bennett]
+                        },
+                        {   TIPO:       CONCERTO,
+                            NOME:       Danger World Tour,
+                            DATA:       (02/10/1922),
+                            ARTISTAS:   []
                         }   ],
         OBRAS:      [
-                        {   TITULO:     FreeTibet,
-                            ARTISTAS:   [Vini Vici, Highlight Tribe],
-                            LANCAMENTO: (19/03/2010)    },
+                        {   TITULO:     Thriller,
+                            ARTISTAS:   [Michael Jackson],
+                            LANCAMENTO: (02/10/2009)    },
                         {
-                            TITULO:     HighSpirit,
-                            ARTISTAS:   [Vini Vici],
-                            LANCAMENTO: (28/04/2016)    }   ]
-    }
+                            TITULO:     Billie Jean,
+                            ARTISTAS:   [Michael Jackson, Amy Winehouse],
+                            LANCAMENTO: (02/10/2009)    }   ]
+    },
+    {
+        NOME:       Lady Gaga,
+        CIDADE:     New York,
+        PAIS:       United States of America,
+        VIDA:       (28/03/1986),
+        NOMENASC:   Stefani Joanne Angelina Germanotta,
+        ENSINOU:    [],
+        APRENDEU:   [Michael Jackson],
+        EVENTOS:    [
+                        {   TIPO:       FESTIVAL,
+                            NOME:       Rock in Rio,
+                            DATA:       (28/04/2019),
+                            ARTISTAS:   [Michael Jackson, Tonny Bennett]
+                        }   ],
+        OBRAS:      [
+                        {   TITULO:     Poker Face,
+                            ARTISTAS:   [Lady Gaga],
+                            LANCAMENTO: (19/12/2009)    },
+                        {
+                            TITULO:     The Lady is a Tramp,
+                            ARTISTAS:   [Lady Gaga, Tony Bennett],
+                            LANCAMENTO: (02/10/2009)    }   ]
+    },
+    {
+        NOME:       Elvis Presley,
+        CIDADE:     New York,
+        PAIS:       United States of America,
+        VIDA:       (08/01/1935-16/08/1977),
+        NOMENASC:   Elvis Aaron Presley,
+        ENSINOU:    [Amy Winehouse],
+        APRENDEU:   [Tony Bennett],
+        EVENTOS:    [],
+        OBRAS:      [
+                        {   TITULO:     Burning Love,
+                            ARTISTAS:   [Elvis Presley],
+                            LANCAMENTO: (15/12/2013)    },
+                        {
+                            TITULO:     Forever Young,
+                            ARTISTAS:   [Elvis Presley, Michael Jackson],
+                            LANCAMENTO: (28/05/2013)    },
+                        {
+                            TITULO:     Jailhouse Rock,
+                            ARTISTAS:   [Elvis Presley],
+                            LANCAMENTO: (26/12/2007)    }   ]
+    },
+
 ]
