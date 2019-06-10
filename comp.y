@@ -309,6 +309,7 @@ void    printNome(void * v, void * ud) {
     printf("%s,", (char *) v);
 }
 
+/*FUNCTIONS TO TEST THE LOADING OF DATA IN THE STRUCTURES, THEY SIMPLY PRINT THE DATA */
 void    printEvento(void * v, void * ud) {
     if(!v)
         return;
@@ -357,6 +358,79 @@ void    printArtista(void * k, void * v, void * ud){
     printf("]\n");
 }
 
+/*FUNCTIONS TO PRINT SOME OF THE DATA CONTAINED IN THE STRUCTURES TO A .DOT GRAPH*/
+
+typedef struct u_d {
+    FILE * f;
+    char * name;
+} * UD;
+
+void    eventoGraph(void * v, void * ud){
+    if(!ud || !v)
+        return;
+    UD d = (UD) ud;
+    P_EVENTO e = (P_EVENTO) v;
+
+    char * str;
+    switch (e->tipo){
+        case FESTIVAL_D:
+            asprintf(&str, "Festival em %s", dataToString(e->data));
+            break;
+        case SARAU_D:
+            asprintf(&str, "Sarau em %s", dataToString(e->data));
+            break;
+        case CONCERTO_D:
+            asprintf(&str, "Concerto em %s", dataToString(e->data));
+            break;
+    }
+    SHAPE_EVENTO(d->f, str);
+    SHAPE_PARTICIPOU(d->f, d->name, str);
+    free(str);
+}
+
+void    ensinouGraph(void * v, void * ud){
+    if(!ud || !v)
+        return;
+    UD d = (UD) ud;
+    char * s = (char *) v;
+
+    SHAPE_ENSINOU(d->f, d->name, s);
+}
+
+void    obraGraph(void * v, void * ud){
+    if(!ud || !v)
+        return;
+    UD d = (UD) ud;
+    P_OBRA o = (P_OBRA) v;
+
+    SHAPE_OBRA(d->f, o->titulo);
+    SHAPE_CRIOU(d->f, d->name, o->titulo);
+}
+
+void    artistaGraph(void * k, void * v, void * ud){
+    if(!ud || !v)
+        return;
+    FILE * f = fopen((char *) ud, "w");
+    P_ARTISTA a = (P_ARTISTA) v;
+
+    GRAPH_TEMPLATE(f);
+    SHAPE_ARTISTA(f, a->nome);
+
+    UD d = malloc(sizeof(struct u_d));
+    d->name = a->nome;
+    d->f = f;
+    //g_slist_foreach(a->aprendeu, &aprendeuGraph, d);
+    g_slist_foreach(a->ensinou, &ensinouGraph, d);
+    g_slist_foreach(a->eventos, &eventoGraph, d);
+    g_slist_foreach(a->obras, &obraGraph, d);
+    free(d);
+
+    fprintf(f, "}");
+    fclose(f);
+}
+
+/*FUNCTIONS TO PRINT THE DATA INTO HTML PAGES */
+
 
 void yyerror(char* s) {
 	printf("%s", s);
@@ -372,6 +446,7 @@ int main() {
     printf("-----------PARSING DONE -------------\n");
 
     g_hash_table_foreach(artistas, &printArtista, NULL);
+    g_hash_table_foreach(artistas, &artistaGraph, "graph.dot");
 
 	return 0;
 }
