@@ -1,11 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#ifdef __APPLE__
-#include </Library/Frameworks/Mono.framework/Versions/5.16.0/include/glib-2.0/glib.h>
-#else
 #include <glib.h>
-#endif
+
 
 
 // typedef struct definitions
