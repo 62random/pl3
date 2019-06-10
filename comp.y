@@ -12,7 +12,7 @@ char *          nome_aux;
 char *          cidade_aux;
 char *          pais_aux;
 char *          nomenasc_aux;
-char *          tipo;
+int             tipo;
 char *          titulo;
 int             flag;
 int             flag2;
@@ -38,17 +38,17 @@ artistas:                                                                       
 
 artista: '{' pessoal ',' formacao ',' EVENTOS ':' '[' eventos  ']' ',' OBRAS ':' '[' obras ']' '}'      {
                                                                                                             asprintf(&$$, "{%s, %s, [%s], [%s]}", $2, $4, $9, $15);
+                                                                                                            g_hash_table_insert(artistas, nome_aux,newArtista(nome_aux, cidade_aux, pais_aux, vida_aux, nomenasc_aux, ensinou_aux, aprendeu_aux, eventos_aux, obras_aux));
                                                                                                             ensinou_aux = g_slist_alloc();
                                                                                                             aprendeu_aux = g_slist_alloc();
-                                                                                                            g_hash_table_insert(artistas, nome_aux,newArtista(nome_aux, cidade_aux, pais_aux, data_aux, nomenasc_aux, ensinou_aux, aprendeu_aux, eventos_aux, obras_aux));
                                                                                                         }
        ;
 
 pessoal:  NOME ':' nome ',' naturalidade ',' VIDA ':' data ',' NOMENASC ':' nomenasc                    {
-                                                                                                            flag = L_PESSOAL;
                                                                                                             asprintf(&$$, "%s, %s, {%s}, {%s}", $3, $5, $9, $13);
                                                                                                             nome_aux = strdup($3);
                                                                                                             nomenasc_aux = strdup($13);
+                                                                                                            flag = L_FORMACAO;
                                                                                                         }
       ;
 
@@ -56,6 +56,7 @@ nome: STR                                                                       
     ;
 
 naturalidade: CIDADE ':' cidade ',' PAIS ':' pais                               {
+                                                                                    flag = L_PESSOAL;
                                                                                     cidade_aux = strdup($3);
                                                                                     pais_aux = strdup($7);
                                                                                     asprintf(&$$, "%s, %s", $3, $7);
@@ -89,10 +90,17 @@ data: '(' NUM '/' NUM '/' NUM')'                                                
                                                                                 }
     ;
 
-nomenasc: STR                                                                   {asprintf(&$$, "%s", $1);}
+nomenasc: STR                                                                   {
+                                                                                    asprintf(&$$, "%s", $1);
+                                                                                    flag = L_FORMACAO;
+                                                                                    flag2 = 0;
+                                                                                }
         ;
 
-formacao: ENSINOU ':' '[' nomes ']' ',' APRENDEU ':' '[' nomes']'               {flag = L_FORMACAO; flag2 = 0; asprintf(&$$, "ENSINOU: [%s], APRENDEU: [%s]", $4, $10);}
+formacao: ENSINOU ':' '[' nomes ']' ',' APRENDEU ':' '[' nomes']'               {
+                                                                                    asprintf(&$$, "ENSINOU: [%s], APRENDEU: [%s]", $4, $10);
+                                                                                    flag = L_EVENTO;
+                                                                                }
         ;
 
 nomes:                                                                          {
@@ -100,8 +108,9 @@ nomes:                                                                          
                                                                                     if (flag == L_FORMACAO) {
                                                                                         if ( flag2 == 0)
                                                                                             flag2 = 1;
-                                                                                        else
+                                                                                        else {
                                                                                             flag2 = 0;
+                                                                                        }
                                                                                     }
                                                                                 }
      | nome                                                                     {
@@ -109,61 +118,59 @@ nomes:                                                                          
                                                                                     if (flag == L_FORMACAO){
                                                                                         if (flag2 == 0) {
                                                                                             flag2 = 1;
-                                                                                            g_slist_append(ensinou_aux, strdup($1));
+                                                                                            ensinou_aux = g_slist_append(ensinou_aux, strdup($1));
                                                                                         }else if (flag2 == 1) {
                                                                                             flag2 = 0;
-                                                                                            g_slist_append(aprendeu_aux, strdup($1));
+                                                                                            aprendeu_aux = g_slist_append(aprendeu_aux, strdup($1));
                                                                                         }
                                                                                     } else if (flag == L_EVENTO) {
-                                                                                        g_slist_append(nomes_aux, strdup($1));
+                                                                                        nomes_aux = g_slist_append(nomes_aux, strdup($1));
                                                                                     } else if (flag == L_OBRA) {
-                                                                                        g_slist_append(nomes_aux, strdup($1));
+                                                                                        nomes_aux = g_slist_append(nomes_aux, strdup($1));
                                                                                     }
                                                                                 }
      | nome ',' nomes                                                           {
                                                                                     asprintf(&$$, "%s; %s", $1, $3);
                                                                                      if (flag == L_FORMACAO){
                                                                                          if (flag2 == 0) {
-                                                                                             g_slist_append(ensinou_aux, strdup($1));
+                                                                                             ensinou_aux = g_slist_append(ensinou_aux, strdup($1));
                                                                                          }else if (flag2 == 1) {
-                                                                                             g_slist_append(aprendeu_aux, strdup($1));
+                                                                                             aprendeu_aux = g_slist_append(aprendeu_aux, strdup($1));
                                                                                          }
                                                                                      } else if (flag == L_EVENTO) {
-                                                                                         g_slist_append(nomes_aux, strdup($1));
+                                                                                         nomes_aux = g_slist_append(nomes_aux, strdup($1));
                                                                                      } else if (flag == L_OBRA) {
-                                                                                         g_slist_append(nomes_aux, strdup($1));
+                                                                                         nomes_aux = g_slist_append(nomes_aux, strdup($1));
                                                                                      }
                                                                                 }
      ;
 
-eventos:                                                                        {asprintf(&$$, "");}
-       | evento                                                                 {asprintf(&$$, "%s", $1);}
+eventos:                                                                        {flag = L_OBRA; asprintf(&$$, "");}
+       | evento                                                                 {flag = L_OBRA; asprintf(&$$, "%s", $1);}
        | evento ',' eventos                                                     {asprintf(&$$, "%s; %s", $1, $3);}
        ;
 
 evento: '{' TIPO ':' tipo ',' DATA ':' data ',' ARTISTAS ':' '[' nomes ']' '}'  {
-                                                                                    flag = L_EVENTO;
-                                                                                    nomes_aux = g_slist_alloc();
                                                                                     asprintf(&$$, "TIPO: %s, DATA: %s, ARTISTAS: [%s]", $4, $8, $13);
-                                                                                    g_slist_append(eventos_aux, newEvento(atoi($4), data_aux, nomes_aux));
+                                                                                    eventos_aux = g_slist_append(eventos_aux, newEvento(tipo, data_aux, nomes_aux));
+                                                                                    nomes_aux = g_slist_alloc();
                                                                                 }
       ;
 
-tipo: CONCERTO                                                                  {asprintf(&$$, "Concerto");}
-    | SARAU                                                                     {asprintf(&$$, "Sarau");}
-    | FESTIVAL                                                                  {asprintf(&$$, "Festival");}
+tipo: CONCERTO                                                                  {asprintf(&$$, "Concerto"); tipo = CONCERTO_D;}
+    | SARAU                                                                     {asprintf(&$$, "Sarau"); tipo = SARAU_D;}
+    | FESTIVAL                                                                  {asprintf(&$$, "Festival"); tipo = FESTIVAL_D;}
     ;
 
-obras:                                                                          {asprintf(&$$, "");}
-     | obra                                                                     {asprintf(&$$, "%s", $1);}
+obras:                                                                          {flag = L_PESSOAL; asprintf(&$$, "");}
+     | obra                                                                     {flag = L_PESSOAL; asprintf(&$$, "%s", $1);}
      | obra ',' obras                                                           {asprintf(&$$, "%s; %s", $1, $3);}
      ;
 
 obra: '{' TITULO ':' nome ',' ARTISTAS ':' '[' nomes ']' ',' LANCAMENTO ':' data '}'   {
-                                                                                            flag = L_OBRA;
-                                                                                            nomes_aux = g_slist_alloc();
                                                                                             asprintf(&$$, "TITULO: %s, ARTISTAS: [%s], LANCAMENTO: %s", $4, $9, $14);
-                                                                                            g_slist_append(obras_aux, newObra(strdup($4), nomes_aux, lancamento_aux));
+                                                                                            obras_aux = g_slist_append(obras_aux, newObra(strdup($4), nomes_aux, lancamento_aux));
+                                                                                            nomes_aux = g_slist_alloc();
                                                                                        }
     ;
 
@@ -296,13 +303,58 @@ char * dataToString(P_DATA d){
     return res;
 }
 
-void    artistaToString(void * k, void * v, void * ud){
+void    printNome(void * v, void * ud) {
+    if(!v)
+        return;
+    printf("%s,", (char *) v);
+}
+
+void    printEvento(void * v, void * ud) {
+    if(!v)
+        return;
+    P_EVENTO e = (P_EVENTO) v;
+    char * str;
+    switch(e->tipo){
+        case CONCERTO_D:
+            asprintf(&str,"Concerto");
+            break;
+        case SARAU_D:
+            asprintf(&str,"Sarau");
+            break;
+        case FESTIVAL_D:
+            asprintf(&str,"Festival");
+            break;
+    }
+
+    printf("%s na data %s com os artistas [", str, dataToString(e->data));
+    g_slist_foreach(e->artistas, &printNome, NULL);
+    printf("],");
+}
+
+void    printObra(void * v, void * ud) {
+    if(!v)
+        return;
+    P_OBRA o = (P_OBRA) v;
+    printf("%s lançada em %s produzida pelos artistas: [", o->titulo, dataToString(o->lancamento));
+    g_slist_foreach(o->artistas, &printNome, NULL);
+    printf("],");
+}
+
+void    printArtista(void * k, void * v, void * ud){
     P_ARTISTA a = (P_ARTISTA) v;
     printf("Nome: %s\n", a->nome);
     printf("Cidade: %s\n", a->cidade);
     printf("Pais: %s\n", a->pais);
     printf("Vida: %s\n", dataToString(a->vida));
-    printf("Nome de nascença: %s\n", a->nomenasc);
+    printf("Nome de nascença: %s\nAprendeu com os artistas: [", a->nomenasc);
+    g_slist_foreach(a->aprendeu, &printNome, NULL);
+    printf("]\nEnsinou os artistas: [");
+    g_slist_foreach(a->ensinou, &printNome, NULL);
+    printf("]\nParticipou nos eventos: [");
+    g_slist_foreach(a->eventos, &printEvento, NULL);
+    printf("]\nCriou as obras: [");
+    g_slist_foreach(a->obras, &printObra, NULL);
+    printf("]\n");
 }
 
 
@@ -319,7 +371,7 @@ int main() {
 	yyparse();
     printf("-----------PARSING DONE -------------\n");
 
-    g_hash_table_foreach(artistas, &artistaToString, NULL);
+    g_hash_table_foreach(artistas, &printArtista, NULL);
 
 	return 0;
 }

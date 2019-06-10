@@ -31,6 +31,7 @@ P_ARTISTA newArtista(char * nome, char * cidade,
                     GSList * ensinou, GSList * aprendeu,
                     GSList * eventos, GSList * obras);
 void    destroyArtista(void * v);
+void    printArtista(void * k, void * v, void *ud);
 char *  dataToString(P_DATA d);
 //utility functions
 //defines
