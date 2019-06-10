@@ -8,7 +8,7 @@
         ENSINOU:    [Michael Jackson, Elvis Presley],
         APRENDEU:   [Frank Sinatra],
         EVENTOS:    [
-                        {   TIPO:       Sarau,
+                        {   TIPO:       SARAU,
                             NOME:       Stars Tonight,
                             DATA:       (15/03/1940),
                             ARTISTAS:   [Frank Sinatra, Michael Jackson]
@@ -16,11 +16,14 @@
         OBRAS:      [
                         {   TITULO:     Body and Soul,
                             ARTISTAS:   [Tony Bennett, Amy Winehouse],
-                            LANCAMENTO: (14/09/2011)    },
+                            LANCAMENTO: (14/09/2011)
+                        },
                         {
                             TITULO:     The Lady is a Tramp,
                             ARTISTAS:   [Tony Bennett, Lady Gaga],
-                            LANCAMENTO: (28/04/2019)    }   ]
+                            LANCAMENTO: (28/04/2019)
+                        }
+                    ]
     },
     {
         NOME:       Michael Jackson,
@@ -40,15 +43,19 @@
                             NOME:       Danger World Tour,
                             DATA:       (02/10/1922),
                             ARTISTAS:   []
-                        }   ],
+                        }
+                    ],
         OBRAS:      [
                         {   TITULO:     Thriller,
                             ARTISTAS:   [Michael Jackson],
-                            LANCAMENTO: (02/10/2009)    },
+                            LANCAMENTO: (02/10/2009)
+                        },
                         {
                             TITULO:     Billie Jean,
                             ARTISTAS:   [Michael Jackson, Amy Winehouse],
-                            LANCAMENTO: (02/10/2009)    }   ]
+                            LANCAMENTO: (02/10/2009)
+                        }
+                    ]
     },
     {
         NOME:       Lady Gaga,
@@ -63,15 +70,19 @@
                             NOME:       Rock in Rio,
                             DATA:       (28/04/2019),
                             ARTISTAS:   [Michael Jackson, Tonny Bennett]
-                        }   ],
+                        }
+                    ],
         OBRAS:      [
                         {   TITULO:     Poker Face,
                             ARTISTAS:   [Lady Gaga],
-                            LANCAMENTO: (19/12/2009)    },
+                            LANCAMENTO: (19/12/2009)
+                        },
                         {
                             TITULO:     The Lady is a Tramp,
                             ARTISTAS:   [Lady Gaga, Tony Bennett],
-                            LANCAMENTO: (02/10/2009)    }   ]
+                            LANCAMENTO: (02/10/2009)
+                        }
+                    ]
     },
     {
         NOME:       Elvis Presley,
@@ -85,15 +96,19 @@
         OBRAS:      [
                         {   TITULO:     Burning Love,
                             ARTISTAS:   [Elvis Presley],
-                            LANCAMENTO: (15/12/2013)    },
+                            LANCAMENTO: (15/12/2013)
+                        },
                         {
                             TITULO:     Forever Young,
                             ARTISTAS:   [Elvis Presley, Michael Jackson],
-                            LANCAMENTO: (28/05/2013)    },
+                            LANCAMENTO: (28/05/2013)
+                        },
                         {
                             TITULO:     Jailhouse Rock,
                             ARTISTAS:   [Elvis Presley],
-                            LANCAMENTO: (26/12/2007)    }   ]
-    },
+                            LANCAMENTO: (26/12/2007)
+                        }
+                    ]
+    }
 
 ]
