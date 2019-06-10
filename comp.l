@@ -6,6 +6,7 @@
 APRENDEU                    {return APRENDEU;}
 ENSINOU                     {return ENSINOU;}
 FESTIVAL                    {return FESTIVAL;}
+SARAU                       {return SARAU;}
 CONCERTO                    {return CONCERTO;}
 NOME                        {return NOME;}
 CIDADE                      {return CIDADE;}
